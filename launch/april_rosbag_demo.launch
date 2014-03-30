@@ -1,0 +1,6 @@
+<launch>
+	<!-- run april tag based detector with stub everything -->
+	<include file="$(find lightswarm_sense)/launch/april_stub.launch" />
+	<!-- play back a bag file with an april tag moving in a rough 100cm circle -->
+	<node pkg="rosbag" type="play" name="player" output="screen" args="--loop $(find lightswarm_sense)/bagfiles/100cm_circle_2014-03-30-14-29-32.bag"/>
+</launch>

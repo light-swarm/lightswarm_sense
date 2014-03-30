@@ -1,0 +1,6 @@
+<launch>
+	<!-- run april tag node with kinect params -->
+	<include file="$(find april_tag)/launch/april_tag_kinect.launch" />
+	<!-- run april tag based detector with stub everything -->
+	<include file="$(find lightswarm_sense)/launch/april_stub.launch" />
+</launch>
