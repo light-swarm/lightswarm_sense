@@ -108,7 +108,7 @@ class ForeGrounder(RGBDImageProcessor):
         contours = [cv2.approxPolyDP(cnt, 3, True) for cnt in contours0[0]]        
 
         blobs = [Blob(contour=c) for c in contours]
-        blobs = [b for b in blobs if b.area > 800]
+        blobs = [b for b in blobs if b.area > 800] # filter
         blobs = sorted(blobs, key=operator.attrgetter('area'), reverse=True)
         for i,b in enumerate(blobs):
             b.idx = i / 20.0
