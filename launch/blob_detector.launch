@@ -1,0 +1,9 @@
+<launch>
+	<include file="$(find openni_launch)/launch/openni.launch" />
+
+     <node name="blob_detector" pkg="lightswarm_sense" type="fore_grounder.py"/>
+
+     <node name="stub_simulator" pkg="lightswarm_core" type="stub_simulator.py"/>
+     <node name="stub_shadow_calculator" pkg="lightswarm_core" type="stub_shadow_calculator.py"/>
+     <node name="stub_renderer" pkg="lightswarm_core" type="stub_renderer.py"/>
+</launch>

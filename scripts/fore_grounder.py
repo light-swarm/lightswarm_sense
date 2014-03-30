@@ -9,6 +9,13 @@ import operator
 import math
 from rgbd_image_processor import RGBDImageProcessor
 
+from lightswarm_core.msg import Objects
+from lightswarm_core.msg import Cylinder
+
+
+GHETTO_CALIBRATION_X_OFFSET = 0
+GHETTO_CALIBRATION_Z_OFFSET = 280
+
 def rgb_by_index(idx):
     idx = idx  % 1.0
     r,g,b = colorsys.hsv_to_rgb(idx, 0.5, 0.5)
@@ -88,6 +95,8 @@ class ForeGrounder(RGBDImageProcessor):
 
     def __init__(self, node_name):
         super(ForeGrounder, self).__init__(node_name)
+        self.pub = rospy.Publisher('/objects', Objects)
+
         self.fgbg = cv2.BackgroundSubtractorMOG(history=5, nmixtures=3, backgroundRatio=0.7)
 
     def get_depth_fgmask(self, d):
@@ -122,10 +131,23 @@ class ForeGrounder(RGBDImageProcessor):
             blob.set_world_coordinates_from_depth(depth)
             blob.draw(rgb)
 
+        self.publish_obstacles(blobs)
+
         #rgb_masked = cv2.bitwise_and(rgb, rgb, mask = fgmask)
         cv2.imshow('frame', rgb)
         k = cv2.waitKey(3)
 
+    def publish_obstacles(self, blobs):
+        # just publish one obstacle
+        if len(blobs) > 0 and blobs[0].z_w is not None:
+            objects = Objects()
+            cylinder = Cylinder()
+            cylinder.location.x = blobs[0].x_w - GHETTO_CALIBRATION_X_OFFSET
+            cylinder.location.y = blobs[0].z_w - GHETTO_CALIBRATION_Z_OFFSET
+            cylinder.height = 180
+            cylinder.radius = 20
+            objects.cylinders.append(cylinder)
+            self.pub.publish(objects)            
 
 
 
