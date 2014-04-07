@@ -1,5 +1,5 @@
 <launch>
-     <node name="april_detector" pkg="lightswarm_sense" type="april_detector.py"/>
+     <!-- <node name="april_detector" pkg="lightswarm_sense" type="april_detector.py"/> -->
 
      <node name="stub_simulator" pkg="lightswarm_core" type="stub_simulator.py"/>
      <node name="stub_shadow_calculator" pkg="lightswarm_core" type="stub_shadow_calculator.py"/>
