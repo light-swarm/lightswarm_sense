@@ -1,4 +1,5 @@
 <launch>
+	 <param name="config_file" value="$(find lightswarm_core)/params/config.yaml" />
      <!-- <node name="april_detector" pkg="lightswarm_sense" type="april_detector.py"/> -->
 
      <node name="stub_simulator" pkg="lightswarm_core" type="stub_simulator.py"/>
