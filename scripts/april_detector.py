@@ -20,16 +20,16 @@ CONFIG_FILE = 'lightswarm_core/params/config.yaml'
 class AprilDetector(object):
 	def __init__(self):
 		rospy.init_node('april_detector')
-		self.sub = rospy.Subscriber('/april_tags', AprilTagList, self.april_callback)
-		self.pub = rospy.Publisher('/objects', Objects)
-
 		config_filename = rospy.get_param('config_file', CONFIG_FILE)
 		self.config_map = yaml.load(open(config_filename))
 		self.setup_camera_transform()
+		self.pub = rospy.Publisher('/objects', Objects)		
+		self.sub = rospy.Subscriber('/april_tags', AprilTagList, self.april_callback)
+
+
+
 
 	def setup_camera_transform(self):
-		#retval, matrix, inliners = cv2.estimateAffine3D(camera_points, world_points)
-		#assert retval == 0, 'camera transform failed'
 		camera_points = np.asarray(self.config_map.get('sense_camera_points'))
 		world_points = np.asarray(self.config_map.get('sense_world_points'))
 		self.transform_matrix = affine.affine_matrix_from_points(camera_points.T,
