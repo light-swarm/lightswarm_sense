@@ -5,6 +5,8 @@ from lightswarm_core.msg import Objects
 from lightswarm_core.msg import Cylinder
 from blob_detector.msg import Blobs
 from blob_detector.msg import Blob
+from lightswarm_core.msg import Agents
+from lightswarm_core.msg import Agent
 
 import numpy as np
 import affine
@@ -15,9 +17,10 @@ CONFIG_FILE = 'lightswarm_core/params/config.yaml'
 
 class LSBlobDetector(object):
 	def __init__(self):
-		rospy.init_node('april_detector')
+		rospy.init_node('ls_blob_detector')
 		self.sub = rospy.Subscriber('/blobs', Blobs, self.blobs_callback)
 		self.pub = rospy.Publisher('/objects', Objects)
+		self.agents_pub = rospy.Publisher('/agents', Agents)
 
 		config_filename = rospy.get_param('config_file', CONFIG_FILE)
 		self.config_map = yaml.load(open(config_filename))
@@ -43,15 +46,26 @@ class LSBlobDetector(object):
 
 	def blobs_callback(self, blobs):
 		objects = Objects()
+		agents = Agents()
 		for b in blobs.blobs:
 			cylinder = Cylinder()
+			agent = Agent()
+
 			x, y, z = self.transform_camera_coordinates(b.x, b.y, b.z)
+
 			cylinder.location.x = x
 			cylinder.location.y = y
 			cylinder.height = 180
 			cylinder.radius = 20
 			objects.cylinders.append(cylinder)
+
+			agent.location.x = x
+			agent.location.y = y
+			agent.id = b.id
+			agents.agents.append(agent)
+
 		self.pub.publish(objects)
+		self.agents_pub.publish(agents)
 
 
 	def run(self):
