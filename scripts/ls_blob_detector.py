@@ -56,7 +56,7 @@ class LSBlobDetector(object):
 			cylinder.location.x = x
 			cylinder.location.y = y
 			cylinder.height = 180
-			cylinder.radius = 20
+			cylinder.radius = 30
 			objects.cylinders.append(cylinder)
 
 			agent.location.x = x
